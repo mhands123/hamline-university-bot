@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Webchat } from '@botpress/webchat';
 import { MessageCircle, X } from 'lucide-react';
@@ -10,15 +9,76 @@ import Footer from '../components/Footer';
 
 const Index = () => {
   const [isWebchatOpen, setIsWebchatOpen] = useState(false);
+  const [webchatKey, setWebchatKey] = useState(0);
+  const [conversationId, setConversationId] = useState<string>('');
+  const [webchatError, setWebchatError] = useState(false);
 
   const toggleWebchat = () => {
     console.log('Toggle webchat clicked, current state:', isWebchatOpen);
-    setIsWebchatOpen((prevState) => !prevState);
+    
+    if (isWebchatOpen) {
+      // When closing, reset the webchat
+      setIsWebchatOpen(false);
+      setWebchatKey(prev => prev + 1);
+    } else {
+      // When opening, generate new conversation ID if needed
+      if (!conversationId) {
+        setConversationId(`conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+      }
+      setIsWebchatOpen(true);
+      setWebchatError(false);
+    }
   };
 
   useEffect(() => {
     console.log('Webchat open state changed:', isWebchatOpen);
   }, [isWebchatOpen]);
+
+  const renderWebchat = () => {
+    if (webchatError) {
+      return (
+        <div className="p-4 text-center">
+          <p className="text-red-600 mb-2">Failed to load chat</p>
+          <button 
+            onClick={() => {
+              setWebchatError(false);
+              setWebchatKey(prev => prev + 1);
+            }}
+            className="text-blue-600 underline"
+          >
+            Try Again
+          </button>
+        </div>
+      );
+    }
+
+    try {
+      return (
+        <Webchat 
+          key={webchatKey}
+          clientId="7c904913-a704-40d2-951c-e69e719cc260"
+          conversationId={conversationId}
+          storageKey={`hamline_chat_${conversationId}`}
+          configuration={{
+            botName: "Hamline Assistant",
+            botAvatar: "https://via.placeholder.com/40",
+            themeColor: "#991b1b",
+            showPoweredBy: false,
+            enableTranscriptDownload: false,
+            enableConversationDeletion: false,
+            showCloseButton: false,
+            enablePersistHistory: true,
+            showTypingIndicator: true,
+            autoFocus: true
+          }}
+        />
+      );
+    } catch (error) {
+      console.error('Webchat render error:', error);
+      setWebchatError(true);
+      return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -61,26 +121,11 @@ const Index = () => {
               border: '1px solid #ccc',
               borderRadius: '12px',
               overflow: 'hidden',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              backgroundColor: 'white'
             }}
           >
-            <Webchat 
-              clientId="7c904913-a704-40d2-951c-e69e719cc260"
-              configuration={{
-                botName: "Hamline Assistant",
-                botAvatar: "https://via.placeholder.com/40",
-                theme: "prism",
-                themeColor: "#991b1b",
-                showPoweredBy: false,
-                enableTranscriptDownload: false,
-                enableConversationDeletion: false,
-                showCloseButton: false,
-                disableAnimations: false,
-                enablePersistHistory: true,
-                showTypingIndicator: true,
-                autoFocus: true
-              }}
-            />
+            {renderWebchat()}
           </div>
         )}
       </div>
