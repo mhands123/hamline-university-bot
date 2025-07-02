@@ -80,15 +80,6 @@ const Index = () => {
                 showTypingIndicator: true,
                 autoFocus: true
               }}
-              onMessage={(message) => {
-                console.log('Message sent:', message);
-              }}
-              onBotMessage={(message) => {
-                console.log('Bot message received:', message);
-              }}
-              onError={(error) => {
-                console.error('Webchat error:', error);
-              }}
             />
           </div>
         )}
