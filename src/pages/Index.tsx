@@ -69,29 +69,17 @@ const Index = () => {
             <Webchat 
               key={`webchat-${Date.now()}`}
               clientId="7c904913-a704-40d2-951c-e69e719cc260"
-              hostUrl="https://cdn.botpress.cloud/webchat/v2.1"
-              messagingUrl="https://messaging.botpress.cloud"
               configuration={{
                 botName: "Hamline Assistant",
                 botAvatar: "https://via.placeholder.com/40",
                 theme: "prism",
                 themeColor: "#991b1b",
-                allowedOrigins: ["*"],
                 showPoweredBy: false,
                 enableTranscriptDownload: false,
                 enableConversationDeletion: false,
                 showCloseButton: false,
                 disableAnimations: false,
                 enablePersistHistory: true
-              }}
-              onMessage={(message) => {
-                console.log('Message sent:', message);
-              }}
-              onBotMessage={(message) => {
-                console.log('Bot response received:', message);
-              }}
-              onError={(error) => {
-                console.error('Webchat error:', error);
               }}
             />
           </div>
