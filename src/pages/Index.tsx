@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
-import { Webchat, Fab } from '@botpress/webchat';
+import { useState, useEffect } from 'react';
+import { Webchat } from '@botpress/webchat';
+import { MessageCircle, X } from 'lucide-react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import QuickLinks from '../components/QuickLinks';
@@ -11,8 +12,13 @@ const Index = () => {
   const [isWebchatOpen, setIsWebchatOpen] = useState(false);
 
   const toggleWebchat = () => {
+    console.log('Toggle webchat clicked, current state:', isWebchatOpen);
     setIsWebchatOpen((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    console.log('Webchat open state changed:', isWebchatOpen);
+  }, [isWebchatOpen]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -22,21 +28,44 @@ const Index = () => {
       <NewsEvents />
       <Footer />
       
+      {/* Custom Floating Action Button */}
       <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
-        <Fab onClick={toggleWebchat} />
+        <button
+          onClick={toggleWebchat}
+          className="bg-red-800 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
+          style={{ 
+            width: '60px', 
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          {isWebchatOpen ? (
+            <X size={24} />
+          ) : (
+            <MessageCircle size={24} />
+          )}
+        </button>
+        
+        {/* Webchat Container */}
         {isWebchatOpen && (
           <div style={{ 
             position: 'fixed',
-            bottom: '80px',
+            bottom: '90px',
             right: '20px',
             width: '350px',
             height: '500px',
-            zIndex: 1000
+            zIndex: 999,
+            border: '1px solid #ccc',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
           }}>
             <Webchat 
               clientId="7c904913-a704-40d2-951c-e69e719cc260"
               configuration={{
-                color: '#000',
+                color: '#991b1b',
               }}
             />
           </div>
