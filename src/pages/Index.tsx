@@ -11,17 +11,10 @@ import Footer from '../components/Footer';
 const Index = () => {
   const [isWebchatOpen, setIsWebchatOpen] = useState(false);
   const [conversationId, setConversationId] = useState<string>('');
+  const [webchatError, setWebchatError] = useState<string>('');
 
   const toggleWebchat = () => {
     console.log('Toggle webchat clicked, current state:', isWebchatOpen);
-    
-    if (!isWebchatOpen) {
-      // When opening, generate new conversation ID if needed
-      if (!conversationId) {
-        setConversationId(`conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
-      }
-    }
-    
     setIsWebchatOpen(!isWebchatOpen);
   };
 
@@ -29,9 +22,16 @@ const Index = () => {
     console.log('Webchat open state changed:', isWebchatOpen);
     // Generate conversation ID on first mount
     if (!conversationId) {
-      setConversationId(`conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+      const newConversationId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      console.log('Generated conversation ID:', newConversationId);
+      setConversationId(newConversationId);
     }
   }, [isWebchatOpen, conversationId]);
+
+  const handleWebchatError = (error: any) => {
+    console.error('Webchat error:', error);
+    setWebchatError('Failed to initialize chat. Please try again.');
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -83,38 +83,35 @@ const Index = () => {
             transition: 'opacity 0.2s ease-in-out'
           }}
         >
-          <Webchat 
-            clientId="7c904913-a704-40d2-951c-e69e719cc260"
-            conversationId={conversationId}
-            storageKey={`hamline_chat_${conversationId}`}
-            configuration={{
-              botName: "Hamline Assistant",
-              botAvatar: "https://pbs.twimg.com/profile_images/1302328038/H_400x400.png",
-              themeColor: "#952F37",
-              showPoweredBy: false,
-              enableTranscriptDownload: false,
-              enableConversationDeletion: false,
-              showCloseButton: false,
-              enablePersistHistory: true,
-              showTypingIndicator: true,
-              autoFocus: true,
-              stylesheet: `
-                .bp-widget-container {
-                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                }
-                .bp-widget-header {
-                  background: linear-gradient(135deg, #952F37 0%, #7a262c 100%);
-                  border-radius: 12px 12px 0 0;
-                }
-                .bp-widget-message-bubble-user {
-                  background-color: #952F37;
-                }
-                .bp-widget-input-wrapper {
-                  border-top: 1px solid #e1e5e9;
-                }
-              `
-            }}
-          />
+          {webchatError ? (
+            <div className="p-4 text-center text-red-600">
+              <p>{webchatError}</p>
+              <button 
+                onClick={() => setWebchatError('')}
+                className="mt-2 px-4 py-2 bg-red-600 text-white rounded"
+              >
+                Retry
+              </button>
+            </div>
+          ) : conversationId ? (
+            <Webchat 
+              clientId="7c904913-a704-40d2-951c-e69e719cc260"
+              conversationId={conversationId}
+              configuration={{
+                botName: "Hamline Assistant",
+                botAvatar: "https://pbs.twimg.com/profile_images/1302328038/H_400x400.png",
+                themeColor: "#952F37",
+                showPoweredBy: false,
+                showTypingIndicator: true,
+                autoFocus: true
+              }}
+              onError={handleWebchatError}
+            />
+          ) : (
+            <div className="p-4 text-center">
+              <p>Initializing chat...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
