@@ -22,20 +22,25 @@ const Index = () => {
       <NewsEvents />
       <Footer />
       
-      <div>
+      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
         <Fab onClick={toggleWebchat} />
-        <div
-          style={{
-            display: isWebchatOpen ? 'block' : 'none',
-          }}
-        >
-          <Webchat 
-            clientId="7c904913-a704-40d2-951c-e69e719cc260"
-            configuration={{
-              color: '#000',
-            }}
-          />
-        </div>
+        {isWebchatOpen && (
+          <div style={{ 
+            position: 'fixed',
+            bottom: '80px',
+            right: '20px',
+            width: '350px',
+            height: '500px',
+            zIndex: 1000
+          }}>
+            <Webchat 
+              clientId="7c904913-a704-40d2-951c-e69e719cc260"
+              configuration={{
+                color: '#000',
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
