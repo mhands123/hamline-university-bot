@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Webchat, Fab } from '@botpress/webchat';
+import { Webchat, Fab, WebchatProvider, getClient, Configuration } from '@botpress/webchat';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import QuickLinks from '../components/QuickLinks';
@@ -14,6 +14,11 @@ const Index = () => {
     setIsWebchatOpen((prevState) => !prevState);
   };
 
+  const client = getClient({ clientId: "7c904913-a704-40d2-951c-e69e719cc260" });
+  const configuration: Configuration = {
+    color: '#000',
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -22,26 +27,23 @@ const Index = () => {
       <NewsEvents />
       <Footer />
       
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
-        <Fab onClick={toggleWebchat} />
-        {isWebchatOpen && (
-          <div style={{ 
-            position: 'fixed',
-            bottom: '80px',
-            right: '20px',
-            width: '350px',
-            height: '500px',
-            zIndex: 1000
-          }}>
-            <Webchat 
-              clientId="7c904913-a704-40d2-951c-e69e719cc260"
-              configuration={{
-                color: '#000',
-              }}
-            />
-          </div>
-        )}
-      </div>
+      <WebchatProvider client={client} configuration={configuration}>
+        <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
+          <Fab onClick={toggleWebchat} />
+          {isWebchatOpen && (
+            <div style={{ 
+              position: 'fixed',
+              bottom: '80px',
+              right: '20px',
+              width: '350px',
+              height: '500px',
+              zIndex: 1000
+            }}>
+              <Webchat />
+            </div>
+          )}
+        </div>
+      </WebchatProvider>
     </div>
   );
 };
