@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Webchat } from '@botpress/webchat';
+import '@botpress/webchat/dist/theme.css';
 import { MessageCircle, X } from 'lucide-react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -50,22 +51,47 @@ const Index = () => {
         
         {/* Webchat Container */}
         {isWebchatOpen && (
-          <div style={{ 
-            position: 'fixed',
-            bottom: '90px',
-            right: '20px',
-            width: '350px',
-            height: '500px',
-            zIndex: 999,
-            border: '1px solid #ccc',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
-          }}>
+          <div 
+            key={isWebchatOpen ? 'open' : 'closed'}
+            style={{ 
+              position: 'fixed',
+              bottom: '90px',
+              right: '20px',
+              width: '350px',
+              height: '500px',
+              zIndex: 999,
+              border: '1px solid #ccc',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+            }}
+          >
             <Webchat 
+              key={`webchat-${Date.now()}`}
               clientId="7c904913-a704-40d2-951c-e69e719cc260"
+              hostUrl="https://cdn.botpress.cloud/webchat/v2.1"
+              messagingUrl="https://messaging.botpress.cloud"
               configuration={{
-                color: '#991b1b',
+                botName: "Hamline Assistant",
+                botAvatar: "https://via.placeholder.com/40",
+                theme: "prism",
+                themeColor: "#991b1b",
+                allowedOrigins: ["*"],
+                showPoweredBy: false,
+                enableTranscriptDownload: false,
+                enableConversationDeletion: false,
+                showCloseButton: false,
+                disableAnimations: false,
+                enablePersistHistory: true
+              }}
+              onMessage={(message) => {
+                console.log('Message sent:', message);
+              }}
+              onBotMessage={(message) => {
+                console.log('Bot response received:', message);
+              }}
+              onError={(error) => {
+                console.error('Webchat error:', error);
               }}
             />
           </div>
