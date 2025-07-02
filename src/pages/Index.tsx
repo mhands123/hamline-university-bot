@@ -61,15 +61,30 @@ const Index = () => {
           storageKey={`hamline_chat_${conversationId}`}
           configuration={{
             botName: "Hamline Assistant",
-            botAvatar: "https://via.placeholder.com/40",
-            themeColor: "#991b1b",
+            botAvatar: "https://pbs.twimg.com/profile_images/1302328038/H_400x400.png",
+            themeColor: "#952F37",
             showPoweredBy: false,
             enableTranscriptDownload: false,
             enableConversationDeletion: false,
             showCloseButton: false,
             enablePersistHistory: true,
             showTypingIndicator: true,
-            autoFocus: true
+            autoFocus: true,
+            stylesheet: `
+              .bp-widget-container {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              }
+              .bp-widget-header {
+                background: linear-gradient(135deg, #952F37 0%, #7a262c 100%);
+                border-radius: 12px 12px 0 0;
+              }
+              .bp-widget-message-bubble-user {
+                background-color: #952F37;
+              }
+              .bp-widget-input-wrapper {
+                border-top: 1px solid #e1e5e9;
+              }
+            `
           }}
         />
       );
@@ -92,13 +107,16 @@ const Index = () => {
       <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
         <button
           onClick={toggleWebchat}
-          className="bg-red-800 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
+          className="text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
           style={{ 
             width: '60px', 
             height: '60px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            backgroundColor: '#952F37',
+            background: 'linear-gradient(135deg, #952F37 0%, #7a262c 100%)',
+            boxShadow: '0 4px 16px rgba(149, 47, 55, 0.3)'
           }}
         >
           {isWebchatOpen ? (
@@ -115,13 +133,13 @@ const Index = () => {
               position: 'fixed',
               bottom: '90px',
               right: '20px',
-              width: '350px',
-              height: '500px',
+              width: '380px',
+              height: '580px',
               zIndex: 999,
-              border: '1px solid #ccc',
-              borderRadius: '12px',
+              border: 'none',
+              borderRadius: '16px',
               overflow: 'hidden',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)',
               backgroundColor: 'white'
             }}
           >
