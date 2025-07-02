@@ -51,7 +51,6 @@ const Index = () => {
         {/* Webchat Container */}
         {isWebchatOpen && (
           <div 
-            key={isWebchatOpen ? 'open' : 'closed'}
             style={{ 
               position: 'fixed',
               bottom: '90px',
@@ -66,7 +65,6 @@ const Index = () => {
             }}
           >
             <Webchat 
-              key={`webchat-${Date.now()}`}
               clientId="7c904913-a704-40d2-951c-e69e719cc260"
               configuration={{
                 botName: "Hamline Assistant",
@@ -78,7 +76,18 @@ const Index = () => {
                 enableConversationDeletion: false,
                 showCloseButton: false,
                 disableAnimations: false,
-                enablePersistHistory: true
+                enablePersistHistory: true,
+                showTypingIndicator: true,
+                autoFocus: true
+              }}
+              onMessage={(message) => {
+                console.log('Message sent:', message);
+              }}
+              onBotMessage={(message) => {
+                console.log('Bot message received:', message);
+              }}
+              onError={(error) => {
+                console.error('Webchat error:', error);
               }}
             />
           </div>
