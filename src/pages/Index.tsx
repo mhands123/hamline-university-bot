@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { Webchat } from '@botpress/webchat';
-import '@botpress/webchat/dist/theme.css';
 import { MessageCircle, X } from 'lucide-react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
